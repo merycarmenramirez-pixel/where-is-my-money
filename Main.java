@@ -1,14 +1,16 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Main {
+    
     public static void main(String[] args) {
+        ArrayList<Expense> misGastos = new ArrayList<>();
         Account misCuentas = new Account(0, 0, 0, 0, 0);
         Income misIngresos = new Income(0, 0, 0, 0, 0);
         Bills misBills = new Bills(0, 0, 0, 0);
         Saving misAhorros = new Saving(0, 0, 0);
         DebtPayment misDeudas = new DebtPayment(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-        Expenses misGastos = new Expenses(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-
+        
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("WHERE IS MY MONEY");
@@ -37,6 +39,31 @@ public class Main {
         double saldo5 = scanner.nextDouble();
         misCuentas.setCash(saldo5);
 
+        scanner.nextLine(); // limpia el salto de línea pendiente
+
+        System.out.println("================================");
+        System.out.println("Ahora registra tus gastos");
+        System.out.println("Cuántos gastos quieres registrar?");
+        int cantidadGastos = scanner.nextInt();
+        scanner.nextLine(); // limpia el salto de línea pendiente
+
+        for (int i = 0; i < cantidadGastos; i++) {
+            System.out.println("Categoria del gasto:");
+            String categoria = scanner.nextLine();
+            System.out.println("Monto del gasto:");
+            double monto = scanner.nextDouble();
+            scanner.nextLine(); // limpia el salto de línea pendiente
+            misGastos.add(new Expense(categoria, monto));
+        }
+
+        System.out.println("================================");
+        System.out.println("TUS GASTOS:");
+        double totalGastos = 0;
+        for (Expense gasto : misGastos) {
+            System.out.println(gasto.getCategoria() + ": $" + gasto.getMonto());
+            totalGastos = totalGastos + gasto.getMonto();
+        }
+
         System.out.println("================================");
         System.out.println("RESUMEN DE CUENTAS:");
         System.out.println("Bancolombia Ahorros: $" + misCuentas.getBankAccount1());
@@ -48,8 +75,11 @@ public class Main {
         double totalDisponible = misCuentas.getBankAccount1() + misCuentas.getBankAccount2() 
                                + misCuentas.getBankAccount3() + misCuentas.getBankAccount4() 
                                + misCuentas.getCash();
+
         System.out.println("================================");
         System.out.println("TOTAL DISPONIBLE: $" + totalDisponible);
+        System.out.println("TOTAL GASTOS: $" + totalGastos);
+        System.out.println("SALDO DESPUES DE GASTOS: $" + (totalDisponible - totalGastos));
 
         scanner.close();
     }
